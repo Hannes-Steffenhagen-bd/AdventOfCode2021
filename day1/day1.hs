@@ -2,11 +2,9 @@
 
 main :: IO ()
 main = interact $
-  (++"\n") . show . fst . foldl increment (0, Nothing) . map (read @Int) . lines
+  (++"\n") . show . solution . map (read @Int) . lines
 
-increment (incCount, lastMeasure) currentMeasure
-  | currentMeasure `greaterThan` lastMeasure = (incCount + 1, Just currentMeasure)
-  | otherwise = (incCount, Just currentMeasure)
-
-greaterThan x Nothing = False
-greaterThan x (Just y) = x > y
+solution measurements = length . filter id $
+  zipWith (<)
+          measurements
+          (tail measurements)
