@@ -1,4 +1,5 @@
 {-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE TypeApplications #-}
 
 import qualified Data.List as List
 
@@ -29,7 +30,8 @@ evalRates (sums, lines) = Rates
   { gamma = binaryToInt $ sumsAsBinary,
     epsilon = binaryToInt . map not $ sumsAsBinary
   } where
-  sumsAsBinary = map (\s -> s > lines `div` 2) sums
+  sumsAsBinary = map (\s -> s >= cutoff) sums
+  cutoff = ceiling @Double (fromIntegral lines / 2)
 
 binaryToInt = List.foldl' (\num digit -> num*2 + binaryDigitToInt digit) 0
 
